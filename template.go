@@ -3,6 +3,7 @@ package goaiml
 import (
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"math/rand"
 	"strings"
 	"time"
@@ -86,7 +87,6 @@ func (aimlTemplate *AIMLTemplate) ProcessSrai(aiml *AIML) (*AIMLTemplate, error)
 
 	sraiStruct.Content = strings.Replace(sraiStruct.Content, `<srai>`, "", -1)
 	sraiStruct.Content = strings.Replace(sraiStruct.Content, `</srai>`, "", -1)
-
 	ret, errPattern := aiml.findPattern(sraiStruct.Content, true)
 
 	if errPattern != nil {
@@ -115,7 +115,6 @@ func (aimlTemplate *AIMLTemplate) ProcessRandom(aiml *AIML) error {
 	if err != nil {
 		return err
 	}
-
 	randIdx := random(0, len(randomStruct.List))
 	randContent := randomStruct.List[randIdx]
 	aimlTemplate.Content = randContent.Content
@@ -131,9 +130,11 @@ func (aimlTemplate *AIMLTemplate) ProcessRandom(aiml *AIML) error {
 }
 
 func (aimlTemplate *AIMLTemplate) ProcessStar(starContent []string) {
+	fmt.Println(starContent)
 	for idx, sContent := range starContent {
 		if idx > 0 {
-			aimlTemplate.Content = strings.Replace(aimlTemplate.Content, "<star/>", strings.TrimSpace(sContent), 1)
+			//Edited, remplace all count of <star/>
+			aimlTemplate.Content = strings.Replace(aimlTemplate.Content, "<star/>", strings.TrimSpace(sContent), -1)
 		}
 	}
 

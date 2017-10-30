@@ -3,6 +3,7 @@ package goaiml
 import (
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -26,7 +27,7 @@ func (aiml *AIML) Respond(input string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
+	fmt.Println(aimlTemplate.Content)
 	if strings.Contains(aimlTemplate.Content, "<srai") {
 		return "", errors.New("Srai reference not found")
 	}
@@ -68,8 +69,8 @@ func (aiml *AIML) findPattern(input string, looped bool) (*AIMLTemplate, error) 
 		if strings.Contains(category.Pattern.Content, "<bot") {
 			category.Pattern.ProcessBot(aiml)
 		}
-
-		matchRes := category.Pattern.Regexify().FindStringSubmatch(input)
+		//Modified strip input from extra srings. srai wouldnt work otherwise
+		matchRes := category.Pattern.Regexify().FindStringSubmatch(strings.TrimSpace(input))
 		if len(matchRes) > 0 {
 			return aiml.processTemplateTags(&category.Template, matchRes, looped)
 		}
