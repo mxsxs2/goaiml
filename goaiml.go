@@ -43,6 +43,7 @@ var Reflections = map[string]string{
 	"you":      "I",
 	"my":       "your",
 	"i'm":      "you are",
+	"are":      "am",
 }
 
 func NewAIML() *AIML {

@@ -69,8 +69,9 @@ func (aiml *AIML) findPattern(input string, looped bool) (*AIMLTemplate, error) 
 		if strings.Contains(category.Pattern.Content, "<bot") {
 			category.Pattern.ProcessBot(aiml)
 		}
-		//Modified strip input from extra srings. srai wouldnt work otherwise
+		//Modified strip input from extra spaces. srai wouldnt work otherwise
 		matchRes := category.Pattern.Regexify().FindStringSubmatch(strings.TrimSpace(input))
+
 		if len(matchRes) > 0 {
 			return aiml.processTemplateTags(&category.Template, matchRes, looped)
 		}
