@@ -2,7 +2,7 @@ package goaiml
 
 import "encoding/xml"
 
-const BOT_NAME string = "GOAIMLBot"
+const BOT_NAME string = "Eliza"
 
 type AIML struct {
 	Memory map[string]string
@@ -30,6 +30,19 @@ type AIMLTemplate struct {
 type AIMLPattern struct {
 	XMLName xml.Name `xml:"pattern"`
 	Content string   `xml:",innerxml"`
+}
+
+//Used to map in <star/>
+var Reflections = map[string]string{
+	"am":       "are",
+	"your":     "my",
+	"me":       "you",
+	"myself":   "yourself",
+	"yourself": "myself",
+	"i":        "you",
+	"you":      "I",
+	"my":       "your",
+	"i'm":      "you are",
 }
 
 func NewAIML() *AIML {

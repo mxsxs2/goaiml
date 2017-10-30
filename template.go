@@ -3,8 +3,8 @@ package goaiml
 import (
 	"encoding/xml"
 	"errors"
-	"fmt"
 	"math/rand"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -130,13 +130,35 @@ func (aimlTemplate *AIMLTemplate) ProcessRandom(aiml *AIML) error {
 }
 
 func (aimlTemplate *AIMLTemplate) ProcessStar(starContent []string) {
-	fmt.Println(starContent)
 	for idx, sContent := range starContent {
 		if idx > 0 {
+			//Clean the string and change reflections in it
+			sContent = ProcessStarContent(strings.TrimSpace(sContent))
+
 			//Edited, remplace all count of <star/>
-			aimlTemplate.Content = strings.Replace(aimlTemplate.Content, "<star/>", strings.TrimSpace(sContent), -1)
+			aimlTemplate.Content = strings.Replace(aimlTemplate.Content, "<star/>", sContent, -1)
 		}
 	}
 
 	aimlTemplate.Content = strings.Replace(aimlTemplate.Content, "<star/>", "", -1)
+}
+
+func ProcessStarContent(content string) string {
+	reg, err := regexp.Compile("[,;!.?]+")
+	if err == nil {
+		//Remove the commas and semicolons dots and questionmarks
+		content = reg.ReplaceAllString(content, "")
+	}
+
+	//Split the sentence
+	sentence := strings.Split(content, " ")
+	//Loop the sentence
+	for i, word := range sentence {
+		//Try to swap the word by key
+		if new_word, ok := Reflections[word]; ok {
+			//If it could be swapped then do it
+			sentence[i] = new_word
+		}
+	}
+	return strings.Join(sentence, " ")
 }
