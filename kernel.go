@@ -24,10 +24,26 @@ func (aiml *AIML) Learn(mainFile string) error {
 	return xml.Unmarshal(bytes, &aiml.Root)
 }
 
+//Function used to pre process the input for better pattern match
+func (aiml *AIML) PreProcessInput(input string) string {
+	//The processed Sentence
+	processedSentence := strings.Split(input, " ")
+	//Loop the input text
+	for i, word := range processedSentence {
+		//Try to process the word
+		if processed, ok := PreProcessWords[word]; ok {
+			//If it could be rpocessed then set it
+			processedSentence[i] = processed
+		}
+	}
+	//Return the pre processed sentence
+	return strings.Join(processedSentence, " ")
+}
+
 //Function used to get a response form the AIML file
 func (aiml *AIML) Respond(input string) (string, error) {
 	//Find a template by matching pattern
-	aimlTemplate, err := aiml.findPattern(input, false)
+	aimlTemplate, err := aiml.findPattern(aiml.PreProcessInput(input), false)
 	//If there was a error then return an empty string
 	if err != nil {
 		return "", err
