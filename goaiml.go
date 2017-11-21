@@ -54,6 +54,7 @@ var Reflections = map[string]string{
 	"you have":  "i'd",
 	"i will":    "you will",
 	"you will":  "i'll",
+	"you're":    "i am",
 }
 
 //Used to preprocess the sentences for better regex match
