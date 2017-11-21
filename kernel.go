@@ -27,7 +27,7 @@ func (aiml *AIML) Learn(mainFile string) error {
 //Function used to pre process the input for better pattern match
 func (aiml *AIML) PreProcessInput(input string) string {
 	//The processed Sentence
-	processedSentence := strings.Split(input, " ")
+	processedSentence := strings.Split(strings.ToLower(input), " ")
 	//Loop the input text
 	for i, word := range processedSentence {
 		//Try to process the word

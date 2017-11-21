@@ -157,7 +157,7 @@ func (aimlTemplate *AIMLTemplate) ProcessStar(starContent []string) {
 		//If it is not the first.(The first one is always the full sentence the rest is capture from the regex)
 		if idx > 0 {
 			//Clean the string and change reflections in it
-			sContent = ProcessStarContent(strings.TrimSpace(sContent))
+			sContent = aimlTemplate.ProcessStarContent(strings.TrimSpace(sContent))
 
 			//Edited, remplace all count of <star/>
 			aimlTemplate.Content = strings.Replace(aimlTemplate.Content, "<star/>", sContent, -1)
@@ -168,12 +168,12 @@ func (aimlTemplate *AIMLTemplate) ProcessStar(starContent []string) {
 }
 
 //Function used to process the star tags after it was replaced with the regex capture
-func ProcessStarContent(content string) string {
+func (aimlTemplate *AIMLTemplate) ProcessStarContent(content string) string {
 	//Regex to remove ,;!.? from he input string
 	reg, err := regexp.Compile("[,;!.?]+")
 	if err == nil {
 		//Remove the commas and semicolons dots and questionmarks
-		content = reg.ReplaceAllString(content, "")
+		content = reg.ReplaceAllString(strings.ToLower(content), "")
 	}
 
 	//Split the sentence
